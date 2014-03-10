@@ -1,0 +1,22 @@
+Name:                blaze-bootstrap
+Version:             0.1
+Synopsis:            blaze combinators for Bootstrap, angularjs and Radian
+Description:         Helper functions for generating Text.Blaze.HTML-based markup for
+                     Twitter Bootstrap, AngularJS and Radian.
+License:             BSD3
+License-file:        LICENSE
+Author:              Tom Nielsen
+Maintainer:          tomn@openbrain.org
+build-type:          Simple
+Cabal-Version:       >= 1.8
+
+Library
+   Exposed-modules: Text.Blaze.Html.Bootstrap,
+                    Text.Blaze.Html.AngularJS,
+                    Text.Blaze.Html.Radian,
+                    Text.Blaze.Html.Page
+   Build-depends: base                          >= 4.6        && < 5,
+                  blaze-html,
+                  blaze-markup,
+                  text
+
