@@ -14,14 +14,14 @@ import Control.Monad.Identity
 import Control.Monad.Writer.Lazy
 
 data Page = Page { pageHeaders:: H.Html,
-                   pageNavBar :: NavTree,
+                   pageNavBar :: NavBar,
                    pageContents :: H.Html,
                    pageSidebar :: H.Html,
                    pageFooter :: H.Html,
                    pageScripts :: H.Html}
 
 instance Monoid Page where
-  mempty = Page mempty [] mempty mempty mempty mempty
+  mempty = Page mempty mempty mempty mempty mempty mempty
   (Page h1 nB1 con1 side1 foot1 sc1) `mappend` (Page h2 nB2 con2 side2 foot2 sc2)
      = Page (h1<>h2)
             (nB1 <> nB2)
@@ -33,9 +33,8 @@ instance Monoid Page where
 type PageLayout = Page -> H.Html
 
 blogLayout :: PageLayout
-blogLayout page@(Page {..}) = defaultWrapper page $ do
-  when (not $ null pageNavBar) $
-    staticNavBar pageNavBar
+blogLayout Page{..} = defaultWrapper pageHeaders pageScripts $ do  
+  staticNavBar pageNavBar
   H.div !. "container" $ do
     H.div !. "row" $ do
       H.div !. "col-sm-8" $ pageContents
@@ -43,15 +42,13 @@ blogLayout page@(Page {..}) = defaultWrapper page $ do
   H.div ! A.id "footer" $ do
     H.div !. "container" $ pageFooter
 
-defaultWrapper :: Page -> H.Html -> H.Html
-defaultWrapper page@(Page {..}) body = H.docTypeHtml $ do
+defaultWrapper :: H.Html -> H.Html -> H.Html -> H.Html
+defaultWrapper pageHeaders pageScripts body = H.docTypeHtml $ do
   H.head $ pageHeaders
   H.body $ do body
               pageScripts
 
-
-
-navBar :: Monad m => NavTree -> WriterT Page m ()
+navBar :: Monad m => NavBar -> WriterT Page m ()
 navBar nb = tell $ mempty { pageNavBar = nb }
 
 scriptSrc :: Monad m =>  T.Text -> WriterT Page m ()
