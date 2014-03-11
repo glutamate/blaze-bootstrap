@@ -10,6 +10,8 @@ import qualified Data.Text as T
 import Text.Blaze.Html.Bootstrap
 import Data.Monoid
 import Control.Monad
+import Control.Monad.Identity
+import Control.Monad.Writer.Lazy
 
 data Page = Page { pageHeaders:: H.Html,
                    pageNavBar :: NavTree,
@@ -47,8 +49,28 @@ defaultWrapper page@(Page {..}) body = H.docTypeHtml $ do
   H.body $ do body
               pageScripts
 
-navBar :: NavTree -> Page
-navBar nb = mempty { pageNavBar = nb }
 
-scriptSrc :: T.Text -> Page
-scriptSrc src = mempty { pageScripts = H.script ! A.src (toValue src) $ "" }
+
+navBar :: Monad m => NavTree -> WriterT Page m ()
+navBar nb = tell $ mempty { pageNavBar = nb }
+
+scriptSrc :: Monad m =>  T.Text -> WriterT Page m ()
+scriptSrc src = tell $ mempty { pageScripts = H.script ! A.src (toValue src) $ "" }
+
+header :: Monad m =>  H.Html -> WriterT Page m ()
+header html = tell $ mempty { pageHeaders = html }
+
+contents :: Monad m =>  H.Html -> WriterT Page m ()
+contents html = tell $ mempty { pageContents = html }
+
+sidebar :: Monad m =>  H.Html -> WriterT Page m ()
+sidebar html = tell $ mempty { pageSidebar = html }
+
+footer :: Monad m =>  H.Html -> WriterT Page m ()
+footer html = tell $ mempty { pageFooter = html }
+
+pageWriterT :: Monad m => WriterT Page m () -> m Page
+pageWriterT = execWriterT
+
+pageWriter :: WriterT Page Identity () -> Page
+pageWriter = runIdentity . execWriterT

@@ -18,5 +18,6 @@ Library
    Build-depends: base                          >= 4.6        && < 5,
                   blaze-html,
                   blaze-markup,
-                  text
+                  text,
+                  mtl
 
