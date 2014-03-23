@@ -6,7 +6,7 @@ import Text.Blaze
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as H hiding (form, label)
 import Text.Blaze.Internal
-
+import Data.String
 
 plot :: H.Html -> H.Html
 plot = Parent "plot" "<plot" "</plot>"
@@ -26,6 +26,8 @@ lines = Leaf "lines" "<lines" ">"
 points :: H.Html 
 points = Leaf "points" "<points" ">"
 
-x = attribute "x" " x=\""
+[x,y] = map genAttribute $ words attrs where
+  genAttribute s = attribute (fromString s) (fromString (s++"=\""))
+  attrs = "x y"
 
-y = attribute "y" " y=\""
+--x = attribute "x" " x=\""
