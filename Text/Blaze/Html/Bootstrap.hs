@@ -11,6 +11,9 @@ import qualified Data.Text as T
 import Data.Monoid
 
 
+styleSheetLink src= H.link ! A.rel "stylesheet" ! A.href src ! A.type_ "text/css"
+scriptLink src = H.script ! A.src src $ ""
+
 formRole :: Attribute
 formRole = role "form"
 

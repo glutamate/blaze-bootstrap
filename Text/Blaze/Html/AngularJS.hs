@@ -10,6 +10,9 @@ import Text.Blaze.Internal
 import qualified Data.Text as T
 import Data.Monoid
 
+ngApp :: AttributeValue -> Attribute
+ngApp = attribute "ng-app" " ng-app=\"" 
+
 ngModel :: AttributeValue -> Attribute
 ngModel = attribute "ng-model" " ng-model=\"" 
 
