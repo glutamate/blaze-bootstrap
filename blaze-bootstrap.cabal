@@ -19,5 +19,6 @@ Library
                   blaze-html,
                   blaze-markup,
                   text,
-                  mtl
+                  mtl,
+                  array
 
