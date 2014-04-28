@@ -71,6 +71,19 @@ radianDummyModule :: T.Text -> H.Html
 radianDummyModule nm = 
   H.script $ preEscapedText $ "angular.module('"<>nm<>"', ['radian']);" 
 
+------------------
+-- ScatterPlot  --
+------------------
+
+scatterPlot :: T.Text -> [(Double,Double)] -> H.Html
+scatterPlot nm xys = do
+  let tshow = T.pack . show
+  plotDataCSV nm ["x", "y"] $ map (\(x,y)-> [tshow x, tshow y]) xys
+  plot $ do
+    points ! x (radExpr $ nm<>".x")
+           ! y (radExpr $ nm<>".y")
+
+
 
 ------------------
 -- Histograming --
