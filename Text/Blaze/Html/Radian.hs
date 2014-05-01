@@ -21,6 +21,12 @@ plot = Parent "plot" "<plot" "</plot>"
 plotData :: H.Html -> H.Html
 plotData = Parent "plot-data" "<plot-data" "</plot-data>"
 
+plotRow :: H.Html -> H.Html
+plotRow = Parent "plot-row" "<plot-row" "</plot-row>"
+
+plotCol :: H.Html -> H.Html
+plotCol = Parent "plot-col" "<plot-col" "</plot-col>"
+
 plotOptions :: H.Html -> H.Html
 plotOptions = Parent "plot-options" "<plot-options" "</plot-options>"
 
