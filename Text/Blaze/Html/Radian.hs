@@ -44,7 +44,7 @@ points = Parent "points" "<points" "</points>" $ ""
 
 
 
-[x,y, cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel marker, fill, markerSize] = map genAttribute $ words attrs where
+[x,y, cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize] = map genAttribute $ words attrs where
   genAttribute s = attribute (fromString s) (fromString (' ':s++"=\""))
   attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size"
 
