@@ -81,11 +81,11 @@ radianDummyModule nm =
 -- ScatterPlot  --
 ------------------
 
-scatterPlot :: T.Text -> [(Double,Double)] -> H.Html
-scatterPlot nm xys = do
+scatterPlot :: Int -> Int -> T.Text -> [(Double,Double)] -> H.Html
+scatterPlot h w nm xys = do
   let tshow = T.pack . show
   plotDataCSV nm ["x", "y"] $ map (\(x,y)-> [tshow x, tshow y]) xys
-  plot $ do
+  plot  ! H.height (toValue h) ! H.width (toValue w) $ do
     points ! x (radExpr $ nm<>".x")
            ! y (radExpr $ nm<>".y")
 
