@@ -11,13 +11,19 @@ import qualified Data.Text as T
 import Data.Monoid
 
 ngApp :: AttributeValue -> Attribute
-ngApp = attribute "ng-app" " ng-app=\"" 
+ngApp = attribute "ng-app" " ng-app=\""
+
+ngController :: AttributeValue -> Attribute
+ngController = attribute "ng-controller" " ng-controller=\""
 
 ngModel :: AttributeValue -> Attribute
-ngModel = attribute "ng-model" " ng-model=\"" 
+ngModel = attribute "ng-model" " ng-model=\""
 
 ngClick :: AttributeValue -> Attribute
-ngClick = attribute "ng-click" " ng-click=\"" 
+ngClick = attribute "ng-click" " ng-click=\""
+
+ngOptions :: AttributeValue -> Attribute
+ngOptions = attribute "ng-options" " ng-options=\""
 
 ngInit :: T.Text -> T.Text -> Attribute
 ngInit k v = H.customAttribute "ng-init" $ preEscapedToValue $ k <> "=" <> v
