@@ -33,6 +33,9 @@ dataToggle k = H.customAttribute "data-toggle" $ preEscapedToValue $ k
 dataTarget :: T.Text ->  Attribute
 dataTarget k = H.customAttribute "data-target" $ preEscapedToValue $ k 
 
+dataDismiss :: T.Text ->  Attribute
+dataDismiss k = H.customAttribute "data-dismiss" $ preEscapedToValue $ k 
+
 --role :: Attribute
 role = attribute "role" " role=\""
 
@@ -155,3 +158,19 @@ login_register_form LoginRegister{..} = do
 
 
 toName txt = toValue $ T.toLower $ T.filter (/=' ') txt
+
+
+modal elemid mtitle mbody mfooter = H.div !. "modal fade" ! A.id elemid ! A.tabindex "-1" ! role "dialog" $ do
+  H.div !. "modal-dialog" $ do
+    H.div !. "modal-content" $ do 
+      H.div !. "modal-header" $ do
+        H.button ! A.type_ "button" !. "close" ! dataDismiss "modal" $ do
+             H.span (preEscapedToHtml ("&times;"::T.Text)) 
+             H.span !. "sr-only" $ "Close"
+        H.h4 !. "modal-title" ! A.id "myModalLabel" $ mtitle
+     
+      H.div !. "modal-body" $  mbody
+      H.div !. "modal-footer" $ mfooter
+
+progressBar = H.div !. "progress" $ do
+  H.div !. "progress-bar" ! role "progressbar" ! A.style "width: 0%;" $ ""
