@@ -174,3 +174,9 @@ modal elemid mtitle mbody mfooter = H.div !. "modal fade" ! A.id elemid ! A.tabi
 
 progressBar = H.div !. "progress" $ do
   H.div !. "progress-bar" ! role "progressbar" ! A.style "width: 0%;" $ ""
+
+postButton :: T.Text -> T.Text -> H.Html -> H.Html
+postButton url btnClass label =  H.form ! A.action (H.toValue $ url) ! A.method "post" $ do  
+    H.button !. ("btn " <> btnClass) ! A.type_ "submit" $ label
+
+row x = H.div ! class_ "row" $ x
