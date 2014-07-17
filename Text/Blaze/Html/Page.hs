@@ -54,6 +54,9 @@ navBar nb = tell $ mempty { pageNavBar = nb }
 scriptSrc :: Monad m =>  T.Text -> WriterT Page m ()
 scriptSrc src = tell $ mempty { pageScripts = H.script ! A.src (toValue src) $ "" }
 
+scriptLit :: Monad m =>  T.Text -> WriterT Page m ()
+scriptLit code = tell $ mempty { pageScripts = H.script $ H.preEscapedToHtml code }
+
 cssLink :: Monad m =>  T.Text -> WriterT Page m ()
 cssLink src = tell $ mempty { pageHeaders = H.link ! A.rel "stylesheet" ! A.href (toValue src) ! A.media "screen" }
 
