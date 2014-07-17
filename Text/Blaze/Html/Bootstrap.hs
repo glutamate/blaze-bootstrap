@@ -47,6 +47,7 @@ type NavTree = [NavItem]
 data NavItem = Header H.Html
              | Divider
              | Link H.Html
+             | ActiveLink H.Html
              | SubTree H.Html NavTree
 
 -- example brand : H.a !. "navbar-brand" ! A.href "#" $ "Project name"
@@ -87,6 +88,7 @@ fixedNavBar nb = (H.toHtml nb) !. "navbar-fixed-top"
 
 navBarItem (Header h) = H.li h
 navBarItem (Link h) = H.li h
+navBarItem (ActiveLink h) = H.li !. "active" $  h
 navBarItem (Divider) = mempty
 navBarItem (SubTree hdr items) = H.li !. "dropdown" $ do
   H.a ! A.href "#" !. "dropdown-toggle" ! dataToggle "dropdown" $ do
@@ -98,6 +100,7 @@ navBarItem (SubTree hdr items) = H.li !. "dropdown" $ do
 dropdownItem (Header h) = H.li !. "dropdown-header" $ h
 dropdownItem (Divider) = H.li !. "divider" $ ""
 dropdownItem (Link h) = H.li h
+dropdownItem (ActiveLink h) = H.li !. "active" $ h
 -- TODO http://stackoverflow.com/questions/18023493/bootstrap-3-dropdown-sub-menu-missing
 dropdownItem (SubTree hdr items) = error "dropdown submenus not yet implemented"
 
