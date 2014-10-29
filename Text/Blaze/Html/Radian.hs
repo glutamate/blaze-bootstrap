@@ -38,8 +38,14 @@ plotOptions = Parent "plot-options" "<plot-options" "</plot-options>"
 metadata :: H.Html
 metadata = Parent "metadata" "<metadata" "</metadata>" $ ""
 
-lines :: H.Html
+dateParseFormat :: T.Text -> Attribute
+dateParseFormat k = H.customAttribute "date-parse-format" $ preEscapedToValue $ k
+
+
+lines, lines_ :: H.Html
 lines = Parent "lines" "<lines" "</lines>" $ ""
+
+lines_ = lines
 
 bars :: H.Html
 bars = Parent "bars" "<bars" "</bars>" $ ""
@@ -63,14 +69,15 @@ plotDataCSV nm hdrs rows
     = plotData ! H.name (H.toValue nm) ! cols (H.toValue $ T.intercalate "," hdrs) ! format "csv"
                $ preEscapedText $ "\n" <> (T.unlines $ map (T.intercalate ",") rows)
 
-cassavaPlotData :: CSV.ToNamedRecord a => T.Text -> [a] -> H.Html
-cassavaPlotData _ [] = return ()
-cassavaPlotData nm xs = do
+cassavaPlotData :: CSV.ToNamedRecord a => T.Text -> H.Html -> [a] -> H.Html
+cassavaPlotData _ _ [] = return ()
+cassavaPlotData nm meta xs = do
   let hdrs = allHeaders $ head xs
       hdrsL = map (T.unpack . DTE.decodeUtf8) $ V.toList hdrs
   let csv = toStrict $ CSV.encodeByName hdrs xs
-  plotData ! H.name (H.toValue nm) ! cols (H.toValue $ intercalate "," hdrsL) ! format "csv"
-     $ preEscapedText $ "\n" <> DTE.decodeUtf8 csv <> "\n"
+  plotData ! H.name (H.toValue nm) ! cols (H.toValue $ intercalate "," hdrsL) ! format "csv" $ do
+    meta
+    preEscapedText $ "\n" <> DTE.decodeUtf8 csv <> "\n"
 
 
 
