@@ -19,7 +19,7 @@ import Data.List (foldl1', intercalate)
 import qualified Data.Csv as CSV
 import qualified Data.Vector as V
 import OpenBrain.CSV
-
+import Debug.Trace
 plot :: H.Html -> H.Html
 plot = Parent "plot" "<plot" "</plot>"
 
@@ -64,10 +64,11 @@ points = Parent "points" "<points" "</points>" $ ""
 radExpr :: T.Text -> H.AttributeValue
 radExpr t = toValue $ "[[" <> t <> "]]"
 
-plotDataCSV :: T.Text -> [T.Text] -> [[T.Text]] -> H.Html
-plotDataCSV nm hdrs rows
-    = plotData ! H.name (H.toValue nm) ! cols (H.toValue $ T.intercalate "," hdrs) ! format "csv"
-               $ preEscapedText $ "\n" <> (T.unlines $ map (T.intercalate ",") rows)
+plotDataCSV :: T.Text -> [T.Text] -> H.Html -> [[T.Text]] -> H.Html
+plotDataCSV nm hdrs meta rows
+    = plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! cols (H.toValue $ T.intercalate "," hdrs) ! format "csv" $ do
+        meta
+        preEscapedText $ "\n" <> (T.unlines $ map (T.intercalate ",") rows)
 
 cassavaPlotData :: CSV.ToNamedRecord a => T.Text -> H.Html -> [a] -> H.Html
 cassavaPlotData _ _ [] = return ()
@@ -75,9 +76,9 @@ cassavaPlotData nm meta xs = do
   let hdrs = allHeaders $ head xs
       hdrsL = map (T.unpack . DTE.decodeUtf8) $ V.toList hdrs
   let csv = toStrict $ CSV.encodeByName hdrs xs
-  plotData ! H.name (H.toValue nm) ! cols (H.toValue $ intercalate "," hdrsL) ! format "csv" $ do
+  plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! cols (H.toValue $ intercalate "," hdrsL) ! format "csv" $ do
     meta
-    preEscapedText $ "\n" <> DTE.decodeUtf8 csv <> "\n"
+    trace (show csv) $ unsafeByteString $ "\n" <> csv
 
 
 
@@ -107,14 +108,14 @@ radianDummyModule nm =
 scatterPlot, linePlot :: Int -> Int -> T.Text -> [(Double,Double)] -> H.Html
 scatterPlot h w nm xys = do
   let tshow = T.pack . show
-  plotDataCSV nm ["x", "y"] $ map (\(x,y)-> [tshow x, tshow y]) xys
+  plotDataCSV nm ["x", "y"] "" $ map (\(x,y)-> [tshow x, tshow y]) xys
   plot  ! H.height (toValue h) ! H.width (toValue w) $ do
     points ! x (radExpr $ nm<>".x")
            ! y (radExpr $ nm<>".y")
 
 linePlot h w nm xys = do
   let tshow = T.pack . show
-  plotDataCSV nm ["x", "y"] $ map (\(x,y)-> [tshow x, tshow y]) xys
+  plotDataCSV nm ["x", "y"] "" $ map (\(x,y)-> [tshow x, tshow y]) xys
   plot  ! H.height (toValue h) ! H.width (toValue w) $ do
     lines  ! x (radExpr $ nm<>".x")
            ! y (radExpr $ nm<>".y")
@@ -128,7 +129,7 @@ linePlot h w nm xys = do
 
 dynHistogram :: T.Text -> [Double] -> H.Html
 dynHistogram nm xs = do
-  plotDataCSV nm ["val"] $ map ((:[]) . T.pack . show) xs
+  plotDataCSV nm ["val"] "" $ map ((:[]) . T.pack . show) xs
   plot ! H.name (toValue $ "plot"<>nm) $ do
      bars ! H.customAttribute "hist" (toValue $ "[[histogram("<> nm<>".val, 50)]]")
           ! x "[[hist.centres]]"
@@ -148,7 +149,7 @@ staticHistogram :: T.Text -> Int -> ((H.Html->H.Html) ->(H.Html->H.Html)) -> [Do
 staticHistogram nm nbins modPlot xs = do
   let hist = histValues nbins xs
       tshow = T.pack . show
-  plotDataCSV nm ["val", "histcount"] $ map (\(x,y) -> [tshow x, tshow y]) hist
+  plotDataCSV nm ["val", "histcount"] "" $ map (\(x,y) -> [tshow x, tshow y]) hist
   (modPlot plot) ! H.name (toValue $ "plot"<>nm) $ do
      bars ! x (radExpr $ nm<>".val")
           ! y (radExpr $ nm<>".histcount")
