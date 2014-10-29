@@ -20,5 +20,8 @@ Library
                   blaze-markup,
                   text,
                   mtl,
-                  array
-
+                  array,
+                  cassava,
+                  obutils,
+                  vector,
+                  bytestring
