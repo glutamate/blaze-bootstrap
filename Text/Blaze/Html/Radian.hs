@@ -20,6 +20,10 @@ import qualified Data.Csv as CSV
 import qualified Data.Vector as V
 import OpenBrain.CSV
 import Debug.Trace
+
+import Text.Blaze.Html.Utils
+
+
 plot :: H.Html -> H.Html
 plot = Parent "plot" "<plot" "</plot>"
 

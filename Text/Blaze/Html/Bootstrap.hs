@@ -15,14 +15,9 @@ import Data.Monoid
 
 import Control.Monad
 
-styleSheetLink src= H.link ! A.rel "stylesheet" ! A.href src ! A.type_ "text/css"
-scriptLink src = H.script ! A.src src $ ""
-
-formRole :: Attribute
-formRole = role "form"
+import Text.Blaze.Html.Utils
 
 formControl = A.class_ "form-control"
-
 
 glyphicon :: T.Text -> H.Html
 glyphicon s = H.span !. ("glyphicon glyphicon-"<>s)  $ ""
@@ -35,23 +30,6 @@ dataTarget k = H.customAttribute "data-target" $ preEscapedToValue $ k
 
 dataDismiss :: T.Text ->  Attribute
 dataDismiss k = H.customAttribute "data-dismiss" $ preEscapedToValue $ k
-
---role :: Attribute
-role = attribute "role" " role=\""
-
-infixl 9 !.
-e !. c = e ! A.class_ (H.toValue (c::T.Text))
-
-infixl 9 !#
-e !# c = e ! A.id (H.toValue (c::T.Text))
-
-infixl 9 $:
-e $: c = e (H.toHtml c)
-
-ahref dest = H.a ! A.href (H.toValue dest)
-
-whenJust Nothing _ = return ()
-whenJust (Just x) f = f x
 
 type NavTree = [NavItem]
 

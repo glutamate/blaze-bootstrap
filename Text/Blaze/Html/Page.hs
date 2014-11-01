@@ -7,7 +7,9 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Data.Text as T
 
+import Text.Blaze.Html.Utils
 import Text.Blaze.Html.Bootstrap
+
 import Data.Monoid
 import Control.Monad
 import Control.Monad.Identity
