@@ -41,3 +41,6 @@ formRole = role "form"
 
 tableHeadRow :: [Html] -> Html
 tableHeadRow = thead . tr . mapM_ th 
+
+trow :: [Html] -> Html
+trow = tr . mapM_ td 
