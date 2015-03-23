@@ -51,14 +51,24 @@ lines = Parent "lines" "<lines" "</lines>" $ ""
 
 lines_ = lines
 
+hlines, vlines :: H.Html
+hlines = Parent "hlines" "<hlines" "</hlines>" $ ""
+
+vlines = Parent "vlines" "<vlines" "</vlines>" $ ""
+
+
 bars :: H.Html
 bars = Parent "bars" "<bars" "</bars>" $ ""
 
 points :: H.Html
 points = Parent "points" "<points" "</points>" $ ""
 
+palette :: T.Text -> T.Text -> H.Html
+palette nm bd =
+  let pal = Parent "palette" "<palette" "</palette>"
+  in pal ! H.name (toValue nm) $ preEscapedText $ "\n"<>bd<>"\n"
 
-
+                 
 [x,y, cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize, rangeX, xTicks, plotTitle, fillOpacity] = map genAttribute $ words attrs where
   genAttribute s = attribute (fromString s) (fromString (' ':s++"=\""))
   attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size range-x axis-x-ticks title fill-opacity"
