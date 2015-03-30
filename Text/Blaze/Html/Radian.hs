@@ -22,6 +22,7 @@ import OpenBrain.CSV
 import Debug.Trace
 
 import Text.Blaze.Html.Utils
+import qualified Data.Aeson as Ae
 
 
 plot :: H.Html -> H.Html
@@ -69,9 +70,9 @@ palette nm bd =
   in pal ! H.name (toValue nm) $ preEscapedText $ "\n"<>bd<>"\n"
 
                  
-[x,y, cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize, rangeX, xTicks, plotTitle, fillOpacity] = map genAttribute $ words attrs where
+[x,y, cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize, rangeX, xTicks, plotTitle, fillOpacity, dateFormat] = map genAttribute $ words attrs where
   genAttribute s = attribute (fromString s) (fromString (' ':s++"=\""))
-  attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size range-x axis-x-ticks title fill-opacity"
+  attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size range-x axis-x-ticks title fill-opacity date-format"
 
 --x = attribute "x" " x=\""
 
@@ -83,6 +84,12 @@ plotDataCSV nm hdrs meta rows
     = plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! cols (H.toValue $ T.intercalate "," hdrs) ! format "csv" $ do
         meta
         preEscapedText $ "\n" <> (T.unlines $ map (T.intercalate ",") rows)
+
+plotDataJSON :: Ae.ToJSON a => T.Text -> H.Html -> a -> H.Html
+plotDataJSON nm meta x
+    = plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! format "json" $ do
+        meta
+        preEscapedText $ DTE.decodeUtf8 $ toStrict $ Ae.encode x
 
 cassavaPlotData :: CSV.ToNamedRecord a => T.Text -> H.Html -> [a] -> H.Html
 cassavaPlotData _ _ [] = return ()

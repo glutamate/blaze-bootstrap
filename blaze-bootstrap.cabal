@@ -25,4 +25,5 @@ Library
                   cassava,
                   obutils,
                   vector,
-                  bytestring
+                  bytestring,
+                  aeson
