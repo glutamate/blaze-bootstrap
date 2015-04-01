@@ -37,6 +37,10 @@ plotRow = Parent "plot-row" "<plot-row" "</plot-row>"
 plotCol :: H.Html -> H.Html
 plotCol = Parent "plot-col" "<plot-col" "</plot-col>"
 
+plotGrid :: H.Html -> H.Html
+plotGrid = Parent "plot-grid" "<plot-grid" "</plot-grid>"
+
+
 plotOptions :: H.Html -> H.Html
 plotOptions = Parent "plot-options" "<plot-options" "</plot-options>"
 
