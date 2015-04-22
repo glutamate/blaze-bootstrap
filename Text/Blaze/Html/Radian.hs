@@ -76,9 +76,9 @@ palette nm bd =
   in pal ! H.name (toValue nm) $ preEscapedText $ "\n"<>bd<>"\n"
 
                  
-[x,y,cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize, rangeX, xTicks, plotTitle, fillOpacity, dateFormat, ymin] = map genAttribute $ words attrs where
+[x,y,cols, format, aspect, stroke, strokeWidth, axisXlabel, axisYlabel, marker, fill, markerSize, rangeX, xTicks, plotTitle, fillOpacity, dateFormat, ymin, uiAxisYTransform, axisYTransform, axisXTransform, axisX, axisY, axisXTickFormat] = map genAttribute $ words attrs where
   genAttribute s = attribute (fromString s) (fromString (' ':s++"=\""))
-  attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size range-x axis-x-ticks title fill-opacity date-format ymin"
+  attrs = "x y cols format aspect stroke stroke-width axis-x-label axis-y-label marker fill marker-size range-x axis-x-ticks title fill-opacity date-format ymin ui-axis-y-transform axis-y-transform axis-x-transform axis-x axis-y axis-x-tick-format"
 
 --x = attribute "x" " x=\""
 
