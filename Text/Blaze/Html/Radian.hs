@@ -18,7 +18,7 @@ import qualified Data.Array.Unboxed as Array
 import Data.List (foldl1', intercalate)
 import qualified Data.Csv as CSV
 import qualified Data.Vector as V
-import OpenBrain.CSV
+--import OpenBrain.CSV
 import Debug.Trace
 
 import Text.Blaze.Html.Utils
@@ -95,17 +95,6 @@ plotDataJSON nm meta x
     = plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! format "json" $ do
         meta
         preEscapedText $ DTE.decodeUtf8 $ toStrict $ Ae.encode x
-
-cassavaPlotData :: CSV.ToNamedRecord a => T.Text -> H.Html -> [a] -> H.Html
-cassavaPlotData _ _ [] = return ()
-cassavaPlotData nm meta xs = do
-  let hdrs = allHeaders $ head xs
-      hdrsL = map (T.unpack . DTE.decodeUtf8) $ V.toList hdrs
-  let csv = toStrict $ CSV.encodeByName hdrs xs
-  plotData ! H.id (H.toValue nm) ! H.name (H.toValue nm) ! cols (H.toValue $ intercalate "," hdrsL) ! format "csv" $ do
-    meta
-    trace (show csv) $ unsafeByteString $ "\n" <> csv
-
 
 
 radianScripts :: H.Html

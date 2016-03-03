@@ -23,7 +23,6 @@ Library
                   mtl,
                   array,
                   cassava,
-                  obutils,
                   vector,
                   bytestring,
                   aeson
